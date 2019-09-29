@@ -1,0 +1,38 @@
+{
+  "name": "jsii-rust-runtime",
+  "version": "0.17.0",
+  "private": true,
+  "description": "Rust client for jsii runtime",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Amazon Web Services",
+    "url": "https://aws.amazon.com",
+    "email": "aws-jsii@amazon.com"
+  },
+  "homepage": "https://github.com/aws/jsii",
+  "bugs": {
+    "url": "https://github.com/aws/jsii/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aws/jsii.git",
+    "directory": "packages/jsii-rust-runtime"
+  },
+  "engines": {
+    "node": ">= 10.3.0"
+  },
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "gen": "/bin/bash ./generate.sh",
+    "build": "cargo build",
+    "test": "cargo test",
+    "package": "package-rust"
+  },
+  "devDependencies": {
+    "jsii-build-tools": "file:../jsii-build-tools",
+    "jsii-runtime": "^0.17.0",
+    "jsii-calc": "file:../jsii-calc",
+    "typescript": "~3.6.3"
+  }
+}
