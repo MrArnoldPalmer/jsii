@@ -41,6 +41,14 @@ RUN amazon-linux-extras install corretto8                                       
   && yum clean all && rm -rf /var/cache/yum
 COPY m2-settings.xml /root/.m2/settings.xml
 
+# Install Rust Stable
+ARG RUST_VERSION=nightly
+ENV RUSTUP_HOME=/usr/local/rustup                                                                                       \
+  CARGO_HOME=/usr/local/cargo                                                                                           \
+  PATH=/usr/local/cargo/bin:$PATH
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain $RUST_VERSION
+RUN cargo install cargo-make
+
 # Install Docker
 RUN amazon-linux-extras install docker                                                                                  \
   && yum clean all && rm -rf /var/cache/yum
