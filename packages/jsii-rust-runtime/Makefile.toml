@@ -1,0 +1,7 @@
+[tasks.pre_test]
+script_runner="@shell"
+script = [
+'''
+tar -C node_modules/jsii-calc -zcvf jsii-calc.tar.gz .
+'''
+]

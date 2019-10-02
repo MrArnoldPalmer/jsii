@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use serde_json::{json, Value};
 use std::{
     io::{BufRead, BufReader, Read, Write},
     process::{Child, ChildStderr, ChildStdin, ChildStdout, Command, Stdio},
@@ -20,14 +19,10 @@ pub struct JsiiRuntime {
 }
 
 /// JsiiRequest
-///
-/// Todo: build enum of known/supported apis
-/// Todo: don't allow arbitrary json fields if possible
 #[derive(Debug, Deserialize, Serialize)]
-pub struct JsiiRequest {
-    pub api: String,
-    #[serde(flatten)]
-    pub fields: Value,
+#[serde(tag = "api", rename_all = "camelCase")]
+pub enum JsiiRequest {
+    Load(JsiiModule),
 }
 
 /// JsiiRuntime Errors
@@ -103,12 +98,8 @@ impl JsiiRuntime {
     }
 
     pub fn request_response(&mut self, req: JsiiRequest) -> Result<JsiiResponse, JsiiError> {
-        writeln!(
-            self.stdin,
-            "{}",
-            serde_json::to_string(&req).map_err(JsiiError::FormatErr)?
-        )
-        .map_err(JsiiError::Io)?;
+        let req_str = serde_json::to_string(&req).map_err(JsiiError::FormatErr)?;
+        writeln!(self.stdin, "{}", req_str).map_err(JsiiError::Io)?;
 
         self.read_next_line()
     }
@@ -125,23 +116,14 @@ impl JsiiRuntime {
                 self.stderr
                     .read_to_string(&mut err)
                     .map_err(JsiiError::Io)?;
-                Err(JsiiError::ProcessErr("Some Process Error".into()))
+                Err(JsiiError::ProcessErr(err))
             }
             response_str => serde_json::from_str(response_str).map_err(JsiiError::FormatErr),
         }
     }
 
-    pub fn load_module(
-        &mut self,
-        JsiiModule { name, version }: JsiiModule,
-    ) -> Result<JsiiResponse, JsiiError> {
-        self.request_response(JsiiRequest {
-            api: "load".into(),
-            fields: json!({
-                "name": name,
-                "version": version
-            }),
-        })
+    pub fn load_module(&mut self, module: JsiiModule) -> Result<JsiiResponse, JsiiError> {
+        self.request_response(JsiiRequest::Load(module))
     }
 
     pub fn kill(mut self) -> Result<(), std::io::Error> {
@@ -149,9 +131,9 @@ impl JsiiRuntime {
     }
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct JsiiModule {
     pub name: String,
     pub version: String,
-    // pub tarball: String,
+    pub tarball: String,
 }
