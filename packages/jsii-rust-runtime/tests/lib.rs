@@ -9,7 +9,7 @@ fn load_process() {
         name: "jsii-calc".into(),
         version: "0.17.0".into(),
         // Run cargo make pre_test to generate jsii-calc tarball
-        tarball: format!("{}/jsii-calc.tar.gz", root_dir),
+        tarball: format!("{}/jsii-calc-0.17.0.tgz", root_dir),
     };
 
     let response = runtime.load_module(module);

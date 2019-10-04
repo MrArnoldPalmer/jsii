@@ -1,7 +1,18 @@
-[tasks.pre_test]
+[tasks.pre-build]
 script_runner="@shell"
 script = [
 '''
-tar -C node_modules/jsii-calc -zcvf jsii-calc.tar.gz .
+lerna bootstrap --scope jsii-rust-runtime
+'''
+]
+
+[tasks.pre_test]
+script_runner="@shell"
+dependencies = [
+"pre-build"
+]
+script = [
+'''
+npm pack node_modules/jsii-calc/.
 '''
 ]
