@@ -42,7 +42,7 @@ RUN amazon-linux-extras install corretto8                                       
 COPY m2-settings.xml /root/.m2/settings.xml
 
 # Install Rust Stable
-ARG RUST_VERSION=nightly
+ARG RUST_VERSION=1.38.0
 ENV RUSTUP_HOME=/usr/local/rustup                                                                                       \
   CARGO_HOME=/usr/local/cargo                                                                                           \
   PATH=/usr/local/cargo/bin:$PATH

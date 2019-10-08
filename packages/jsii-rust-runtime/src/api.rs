@@ -57,3 +57,44 @@ pub enum KernelResponse {
     Naming { assembly: String },
     Stats { object_count: i64 },
 }
+
+/// JsiiErrorResponse
+///
+/// Error returned from jsii child process.
+#[derive(Debug, Deserialize, Serialize)]
+pub struct JsiiErrorResponse {
+    error: String,
+    stack: Option<String>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct JsiiOkResponse {
+    ok: KernelResponse,
+}
+
+/// JsiiResponse
+///
+/// Todo: format of responses should be known
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(untagged, rename_all = "camelCase")]
+pub enum JsiiResponse {
+    Hello { hello: String },
+    Ok(JsiiOkResponse),
+    Callback { callback: CallbackResponse },
+    Pending { pending: bool },
+    Error(JsiiErrorResponse),
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct JsiiModule {
+    pub name: String,
+    pub version: String,
+    pub tarball: String,
+}
+
+/// JsiiRequest
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(tag = "api", rename_all = "camelCase")]
+pub enum JsiiRequest {
+    Load(JsiiModule),
+}

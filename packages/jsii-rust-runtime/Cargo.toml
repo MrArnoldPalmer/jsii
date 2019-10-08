@@ -1,5 +1,5 @@
 [package]
-name = "jsii_rust_runtime"
+name = "jsii_runtime"
 version = "0.1.0"
 authors = ["jsii"]
 edition = "2018"

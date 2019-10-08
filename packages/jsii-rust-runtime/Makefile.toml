@@ -8,11 +8,8 @@ lerna bootstrap --scope jsii-rust-runtime
 
 [tasks.pre_test]
 script_runner="@shell"
-dependencies = [
-"pre-build"
-]
 script = [
 '''
-npm pack node_modules/jsii-calc/.
+./node_modules/.bin/jsii-pacmak -t js -o target/jsii-calc --recurse node_modules/jsii-calc
 '''
 ]
