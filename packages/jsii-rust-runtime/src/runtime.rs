@@ -47,7 +47,7 @@ impl JsiiRuntime {
 
     fn handshake(mut self) -> Result<Self, JsiiRuntimeError> {
         self.read_next_line().and_then(|response| match response {
-            JsiiResponse::Hello { .. } => Ok(self),
+            JsiiResponse::Hello(..) => Ok(self),
             res => Err(JsiiRuntimeError::Handshake(res)),
         })
     }

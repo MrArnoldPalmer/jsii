@@ -1,11 +1,15 @@
-use crate::api::JsiiResponse;
+use crate::api::*;
 use crate::runtime::JsiiRuntimeError;
+use serde_json::Value;
 use std::{error::Error, fmt};
 
 #[derive(Debug)]
 pub enum JsiiClientError {
     Runtime(JsiiRuntimeError),
     UnexpectedResponse(JsiiResponse),
+    UnexpectedKernelResponse(KernelResponse),
+    UnexpectedInvokeResponse(Value),
+    FormatError(serde_json::Error),
 }
 
 impl From<JsiiRuntimeError> for JsiiClientError {
@@ -25,6 +29,9 @@ impl Error for JsiiClientError {
         match self {
             Self::Runtime(inner) => Error::description(inner),
             Self::UnexpectedResponse(_err) => "Unexpected response to request",
+            Self::UnexpectedKernelResponse(_err) => "Unexpected kernel response",
+            Self::UnexpectedInvokeResponse(_err) => "Unexpected invoke response",
+            Self::FormatError(_err) => "Unexpected invoke response format",
         }
     }
 

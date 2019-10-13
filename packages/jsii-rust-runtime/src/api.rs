@@ -1,12 +1,11 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use std::collections::HashMap;
 
-// const TOKEN_REF: &str = "$jsii.byref";
-// const TOKEN_DATE: &str = "$jsii.date";
-// const TOKEN_ENUM: &str = "$jsii.enum";
-
-type ObjRef = HashMap<String, String>;
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ObjRef {
+    #[serde(rename = "$jsii.byref")]
+    ref_id: String,
+}
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -32,6 +31,43 @@ pub struct SetRequest {
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
+pub struct HelloResponse {
+    hello: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct LoadResponse {
+    assembly: String,
+    types: i64,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetResponse {
+    pub value: Value,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct InvokeResponse {
+    pub result: Value,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct BeginResponse {
+    pub promiseid: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct EndResponse {
+    result: Value,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct CallbackResponse {
     cbid: String,
     cookie: Option<String>,
@@ -41,21 +77,45 @@ pub struct CallbackResponse {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CallbacksResponse {
+    callbacks: Vec<CallbackResponse>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CompleteResponse {
+    cbid: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct NamingResponse {
+    assemby: String,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct StatsResponse {
+    object_count: i64,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 #[serde(untagged, rename_all = "camelCase")]
 pub enum KernelResponse {
-    Hello { hello: String },
-    Load { assembly: String, types: i64 },
+    Hello(HelloResponse),
+    Load(LoadResponse),
     Create(ObjRef),
-    Del {},
-    Get { value: Value },
-    Set {},
-    Invoke { result: Value },
-    Begin { promiseid: String },
-    End { result: Value },
-    Callback { callbacks: Vec<CallbackResponse> },
-    Complete { cbid: String },
-    Naming { assembly: String },
-    Stats { object_count: i64 },
+    // Del {},
+    Get(GetResponse),
+    // Set {},
+    Invoke(InvokeResponse),
+    Begin(BeginResponse),
+    End(EndResponse),
+    Callback(CallbacksResponse),
+    Complete(CompleteResponse),
+    Naming(NamingResponse),
+    Stats(StatsResponse),
 }
 
 /// JsiiErrorResponse
@@ -63,13 +123,13 @@ pub enum KernelResponse {
 /// Error returned from jsii child process.
 #[derive(Debug, Deserialize, Serialize)]
 pub struct JsiiErrorResponse {
-    error: String,
-    stack: Option<String>,
+    pub error: String,
+    pub stack: Option<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct JsiiOkResponse {
-    ok: KernelResponse,
+    pub ok: KernelResponse,
 }
 
 /// JsiiResponse
@@ -78,7 +138,7 @@ pub struct JsiiOkResponse {
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(untagged, rename_all = "camelCase")]
 pub enum JsiiResponse {
-    Hello { hello: String },
+    Hello(HelloResponse),
     Ok(JsiiOkResponse),
     Callback { callback: CallbackResponse },
     Pending { pending: bool },
@@ -92,9 +152,25 @@ pub struct JsiiModule {
     pub tarball: String,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct JsiiCreateObject {
+    pub fqn: String,
+    pub args: Vec<serde_json::Value>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct JsiiInvokeRequest {
+    #[serde(rename = "objref")]
+    pub obj_ref: ObjRef,
+    pub method: String,
+    pub args: Vec<serde_json::Value>,
+}
+
 /// JsiiRequest
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(tag = "api", rename_all = "camelCase")]
 pub enum JsiiRequest {
+    Invoke(JsiiInvokeRequest),
+    Create(JsiiCreateObject),
     Load(JsiiModule),
 }
