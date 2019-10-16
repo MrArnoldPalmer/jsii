@@ -1,46 +1,14 @@
 use crate::api::*;
 use crate::runtime::{JsiiRuntime, JsiiRuntimeError};
-use std::convert::{TryFrom, TryInto};
+use std::convert::TryInto;
 
 mod error;
 pub use error::JsiiClientError;
 
+#[derive(Debug)]
 pub struct JsiiClient {
     // Todo: Allow multiple clients referencing same runtime
     runtime: JsiiRuntime,
-}
-
-// Convencience methods for converting responses from runtime into Results based on expected output
-impl TryFrom<JsiiResponse> for JsiiOkResponse {
-    type Error = JsiiClientError;
-    fn try_from(response: JsiiResponse) -> Result<Self, Self::Error> {
-        match response {
-            JsiiResponse::Ok(val) => Ok(val),
-            rest => Err(JsiiClientError::UnexpectedResponse(rest)),
-        }
-    }
-}
-
-impl TryFrom<JsiiResponse> for ObjRef {
-    type Error = JsiiClientError;
-    fn try_from(response: JsiiResponse) -> Result<Self, Self::Error> {
-        let inner = JsiiOkResponse::try_from(response)?;
-        match inner.ok {
-            KernelResponse::Create(val) => Ok(val),
-            rest => Err(JsiiClientError::UnexpectedKernelResponse(rest)),
-        }
-    }
-}
-
-impl TryFrom<JsiiResponse> for InvokeResponse {
-    type Error = JsiiClientError;
-    fn try_from(response: JsiiResponse) -> Result<Self, Self::Error> {
-        let inner = JsiiOkResponse::try_from(response)?;
-        match inner.ok {
-            KernelResponse::Invoke(val) => Ok(val),
-            rest => Err(JsiiClientError::UnexpectedKernelResponse(rest)),
-        }
-    }
 }
 
 impl JsiiClient {
