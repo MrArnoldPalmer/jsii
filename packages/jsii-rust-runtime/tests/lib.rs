@@ -37,14 +37,7 @@ impl<'a> Very<'a> {
     }
 
     fn hey(&mut self) -> Result<f64, JsiiClientError> {
-        let obj_ref = self.get_ref();
-        self.get_client()
-            .call_method(JsiiInvokeRequest {
-                obj_ref,
-                method: "hey".into(),
-                args: Vec::new(),
-            })?
-            .try_into()
+        self.call_method("hey".into(), Vec::new())?.try_into()
     }
 }
 
@@ -92,8 +85,13 @@ fn load_process() {
     let lib_response = client.load_module(jsii_calc_lib);
     let response = client.load_module(jsii_calc);
 
-    let mut very = dbg!(Very::new(&mut client).expect("Can't create very instance"));
-    dbg!(very.hey().expect("Error calling method on Very instance"));
+    let very = Very::new(&mut client);
+    assert!(very.is_ok(), "Err creating instance of Very");
+
+    let hey_result = very.unwrap().hey().expect("Error calling hey method");
+    // checking floating point equality though not ideal
+    assert_eq!(hey_result, 42.0 as f64);
+
     assert!(
         base_of_base_response.is_ok(),
         "Err loading module {:?}",

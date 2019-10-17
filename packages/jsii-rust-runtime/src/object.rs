@@ -7,8 +7,14 @@ pub trait JsiiObject<'a> {
     fn get_client(&'a mut self) -> &'a mut JsiiClient;
     fn call_method(
         &'a mut self,
-        method: JsiiInvokeRequest,
+        method: String,
+        args: Vec<serde_json::Value>,
     ) -> Result<InvokeResponse, JsiiClientError> {
-        self.get_client().call_method(method)
+        let obj_ref = self.get_ref();
+        self.get_client().call_method(JsiiInvokeRequest {
+            obj_ref,
+            method,
+            args,
+        })
     }
 }
