@@ -2,7 +2,7 @@ use crate::api::{InvokeResponse, JsiiInvokeRequest, ObjRef};
 use crate::client::{JsiiClient, JsiiClientError};
 
 pub trait JsiiObject<'a> {
-    fn get_fqn() -> String;
+    const FQN: &'a str;
     fn get_ref(&self) -> ObjRef;
     fn get_client(&'a mut self) -> &'a mut JsiiClient;
     fn call_method(

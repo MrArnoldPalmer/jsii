@@ -1,45 +1,7 @@
-use jsii_runtime::api::*;
-use jsii_runtime::{JsiiClient, JsiiClientError, JsiiModule, JsiiObject};
-use std::convert::TryInto;
+use jsii_runtime::{JsiiClient, JsiiModule};
 
-// Example of generated rust code
-#[derive(Debug)]
-struct Very<'a> {
-    client: &'a mut JsiiClient,
-    obj_ref: ObjRef,
-}
-
-impl<'a> JsiiObject<'a> for Very<'_> {
-    fn get_fqn() -> String {
-        String::from("@scope/jsii-calc-base-of-base.Very")
-    }
-
-    fn get_ref(&self) -> ObjRef {
-        self.obj_ref.clone()
-    }
-
-    fn get_client(&'a mut self) -> &'a mut JsiiClient {
-        self.client
-    }
-}
-
-impl<'a> Very<'a> {
-    fn new(client: &'a mut JsiiClient) -> Result<Self, JsiiClientError> {
-        client
-            .create_object(JsiiCreateObject {
-                fqn: Self::get_fqn(),
-                args: Vec::new(),
-            })
-            .map(move |response| Self {
-                obj_ref: response,
-                client,
-            })
-    }
-
-    fn hey(&mut self) -> Result<f64, JsiiClientError> {
-        self.call_method("hey".into(), Vec::new())?.try_into()
-    }
-}
+mod jsii_calc;
+use jsii_calc::base_of_base::Very;
 
 #[test]
 fn load_process() {
