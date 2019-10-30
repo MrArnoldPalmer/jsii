@@ -72,8 +72,11 @@ impl JsiiRuntime {
             response_str => serde_json::from_str(response_str).map_err(JsiiRuntimeError::BadOutput),
         }
     }
+}
 
-    pub fn kill(mut self) -> Result<(), JsiiRuntimeError> {
-        self.process.kill().map_err(JsiiRuntimeError::Io)
+// Automatically kill child process when runtime drops
+impl Drop for JsiiRuntime {
+    fn drop(&mut self) {
+        self.process.kill();
     }
 }

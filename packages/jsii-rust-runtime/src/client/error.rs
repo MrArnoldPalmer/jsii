@@ -7,7 +7,7 @@ use std::{error::Error, fmt};
 pub enum JsiiClientError {
     Runtime(JsiiRuntimeError),
     UnexpectedResponse(JsiiResponse),
-    UnexpectedKernelResponse(KernelResponse),
+    UnexpectedKernelResponse(JsiiKernelResponse),
     UnexpectedInvokeResponse(Value),
     FormatError(serde_json::Error),
 }

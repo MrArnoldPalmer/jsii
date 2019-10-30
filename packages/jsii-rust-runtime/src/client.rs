@@ -28,7 +28,10 @@ impl JsiiClient {
             .try_into()
     }
 
-    pub fn create_object(&mut self, object: JsiiCreateObject) -> Result<ObjRef, JsiiClientError> {
+    pub fn create_object(
+        &mut self,
+        object: JsiiCreateObject,
+    ) -> Result<JsiiObjRef, JsiiClientError> {
         self.runtime
             .request_response(JsiiRequest::Create(object))?
             .try_into()
@@ -37,9 +40,27 @@ impl JsiiClient {
     pub fn call_method(
         &mut self,
         method: JsiiInvokeRequest,
-    ) -> Result<InvokeResponse, JsiiClientError> {
+    ) -> Result<JsiiInvokeResponse, JsiiClientError> {
         self.runtime
             .request_response(JsiiRequest::Invoke(method))?
+            .try_into()
+    }
+
+    pub fn get_property(
+        &mut self,
+        value: JsiiGetRequest,
+    ) -> Result<JsiiGetResponse, JsiiClientError> {
+        self.runtime
+            .request_response(JsiiRequest::Get(value))?
+            .try_into()
+    }
+
+    pub fn set_property(
+        &mut self,
+        value: JsiiSetRequest,
+    ) -> Result<JsiiSetResponse, JsiiClientError> {
+        self.runtime
+            .request_response(JsiiRequest::Set(value))?
             .try_into()
     }
 }
