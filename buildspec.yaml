@@ -11,6 +11,7 @@ phases:
       - yarn fetch-dotnet-snk
   build:
     commands:
+      - /bin/bash ./scripts/align-version.sh
       - yarn build && yarn test
   post_build:
     commands:
