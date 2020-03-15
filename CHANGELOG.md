@@ -1,7 +1,88 @@
-# Change Log
+# Changelog
 
-All notable changes to this project will be documented in this file.
-See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [1.2.0](https://github.com/aws/jsii/compare/v0.17.0...v1.2.0) (2020-03-15)
+
+
+### Features
+
+* **python:** add license & classifiers to generated packages ([#712](https://github.com/aws/jsii/issues/712)) ([84fd8bb](https://github.com/aws/jsii/commit/84fd8bbcf2ca22235780d3fa3959bd327a0d8107)), closes [#707](https://github.com/aws/jsii/issues/707)
+* CDK Build Integration Test ([#1219](https://github.com/aws/jsii/issues/1219)) ([e99d722](https://github.com/aws/jsii/commit/e99d722fb7b12d6a87b423980aca70077c0ad1cb)), closes [#1209](https://github.com/aws/jsii/issues/1209)
+* **jsii-diff:** make assembly validation optional ([#926](https://github.com/aws/jsii/issues/926)) ([e2c80f0](https://github.com/aws/jsii/commit/e2c80f07f38aee25fc57164e71bdd8ae448cda7e))
+* configure `engines` with `node >= 10.3.0` ([#795](https://github.com/aws/jsii/issues/795)) ([6164b6b](https://github.com/aws/jsii/commit/6164b6b399888f6cff8c1f233d42cff0bc1eba68)), closes [#794](https://github.com/aws/jsii/issues/794)
+* **csharp:** enable nullable reference types ([#1246](https://github.com/aws/jsii/issues/1246)) ([cbc7258](https://github.com/aws/jsii/commit/cbc72588b7a70fb2cb1d6d3012bec53d27263001))
+* **dotnet:** upgrade target framework to netcoreapp3.1 ([#1241](https://github.com/aws/jsii/issues/1241)) ([c324439](https://github.com/aws/jsii/commit/c32443979548faa283894d5aaf4f4baf31350063))
+* **java:** annotate nullability ([#1234](https://github.com/aws/jsii/issues/1234)) ([6f2ab03](https://github.com/aws/jsii/commit/6f2ab03dfc4fe5625d97cfacdc980e85b54928a7)), closes [aws/aws-cdk#6026](https://github.com/aws/aws-cdk/issues/6026)
+* **java:** offer Builders for certain Java classes ([#895](https://github.com/aws/jsii/issues/895)) ([f9c1335](https://github.com/aws/jsii/commit/f9c1335cc0f27c8186d5b7d7a148ef7fffc5b1aa)), closes [#488](https://github.com/aws/jsii/issues/488)
+* **jsii:** enable strictPropertyInitialization checks ([#838](https://github.com/aws/jsii/issues/838)) ([11268c4](https://github.com/aws/jsii/commit/11268c4d61af6fa06b16f3bfc0d240b71e4bc1f6)), closes [#4286](https://github.com/aws/jsii/issues/4286)
+* **jsii:** switch to disable reserved words warnings ([#1076](https://github.com/aws/jsii/issues/1076)) ([5389def](https://github.com/aws/jsii/commit/5389def583160d6e06bb399704ff4cce9c8ef13a)), closes [#1073](https://github.com/aws/jsii/issues/1073)
+* **jsii-config:** introducing jsii-config ([#981](https://github.com/aws/jsii/issues/981)) ([2bbf576](https://github.com/aws/jsii/commit/2bbf576b8877b846bf5b602945ab4a8a90993975)), closes [#904](https://github.com/aws/jsii/issues/904)
+* **kernel:** annotate implemented interfaces on "ObjRef"s ([#825](https://github.com/aws/jsii/issues/825)) ([a4e2095](https://github.com/aws/jsii/commit/a4e209539190cbe156462364f2617e9a05c5589c))
+* configure AWS logo for NuGet packages ([#797](https://github.com/aws/jsii/issues/797)) ([04305ce](https://github.com/aws/jsii/commit/04305ce4a3eb7742168ea40573105127f852936b))
+* update Dockerfile to .NET SDK 3.1, improve NuGet metadata ([#880](https://github.com/aws/jsii/issues/880)) ([5e076cf](https://github.com/aws/jsii/commit/5e076cfe0063e87e58c85862488d88a5959036ba))
+* upgrade to typescript 3.7 ([#988](https://github.com/aws/jsii/issues/988)) ([6e0a7e6](https://github.com/aws/jsii/commit/6e0a7e698ee1f2b20526667bb1222e92beb9eec8))
+* **pacmak:** build all java targets at once ([#849](https://github.com/aws/jsii/issues/849)) ([5d7824d](https://github.com/aws/jsii/commit/5d7824d5f0aa35625fc56b8301bc27a1e5691d46))
+* **pacmak:** put translated README into module docstring ([#900](https://github.com/aws/jsii/issues/900)) ([8bacfb1](https://github.com/aws/jsii/commit/8bacfb1463e252aeb907665efe2038fb47e5f01a))
+* **rosetta:** extract and compile samples into "tablets" ([#925](https://github.com/aws/jsii/issues/925)) ([eec44e1](https://github.com/aws/jsii/commit/eec44e106ee1e3d2e3d03f70e4d87a4d7ee0bbba))
+* **rosetta:** translate examples to Java and C# ([#985](https://github.com/aws/jsii/issues/985)) ([d591b85](https://github.com/aws/jsii/commit/d591b859e1f4a3f49753b91d752e0e654400795e))
+* **sampiler:** translate code samples to Python ([#827](https://github.com/aws/jsii/issues/827)) ([c9a7002](https://github.com/aws/jsii/commit/c9a7002431c0db6224d595eb5555b916036d4575))
+* **superchain:** upgrade maven to 3.6.3 ([#1205](https://github.com/aws/jsii/issues/1205)) ([1398bef](https://github.com/aws/jsii/commit/1398bef0eb5359b2cacb3eda3a1255510f0e7e77))
+
+
+### Bug Fixes
+
+* **dotnet:** allow down-casting to parent interface type ([#983](https://github.com/aws/jsii/issues/983)) ([8a390e5](https://github.com/aws/jsii/commit/8a390e579a7cae2bbe386eaefb1c7a9084210a7f)), closes [#982](https://github.com/aws/jsii/issues/982)
+* **dotnet:** documentation strings sometimes invalid ([#1127](https://github.com/aws/jsii/issues/1127)) ([94da056](https://github.com/aws/jsii/commit/94da0568c09a0d18cff6be7b933cd2d5ad506c65))
+* **dotnet:** fix callback issues ([#953](https://github.com/aws/jsii/issues/953)) ([849c004](https://github.com/aws/jsii/commit/849c004ddfefa7b255197daf4dddc8e6f55c6dcb))
+* **dotnet:** missing ? on nullable interface members ([#1287](https://github.com/aws/jsii/issues/1287)) ([9299db2](https://github.com/aws/jsii/commit/9299db25348504a4e413a047ce9ba914fb0f8856)), closes [#1285](https://github.com/aws/jsii/issues/1285)
+* **dotnet:** use snupkg format for dotnet symbol packages ([#830](https://github.com/aws/jsii/issues/830)) ([0d18b4d](https://github.com/aws/jsii/commit/0d18b4db82ba839fd18b74446b3736b27b9a8672)), closes [NuGet/Home#6082](https://github.com/NuGet/Home/issues/6082)
+* **dotnet/analyzer:** remove dependency on Runtime ([#927](https://github.com/aws/jsii/issues/927)) ([815b449](https://github.com/aws/jsii/commit/815b44982bfe1f9b2ee3a9cf60e4f5dfb4dd22f6))
+* **dotnet/roslyn:** analyzer target framework ([#1071](https://github.com/aws/jsii/issues/1071)) ([fea0f0a](https://github.com/aws/jsii/commit/fea0f0a4c8ddd002957823a42b2e93cd6a23344d)), closes [aws/aws-cdk#5189](https://github.com/aws/aws-cdk/issues/5189)
+* **java:** correctly search for protected override implementations ([#905](https://github.com/aws/jsii/issues/905)) ([e3f0f6c](https://github.com/aws/jsii/commit/e3f0f6cb4e7fa722412ca158a1e2803ed06c4c40)), closes [#903](https://github.com/aws/jsii/issues/903)
+* **java:** handle null-able collections correctly ([#986](https://github.com/aws/jsii/issues/986)) ([e88e5e2](https://github.com/aws/jsii/commit/e88e5e2dc3db75dc9cbae494185ae65100783544)), closes [aws/aws-cdk#4316](https://github.com/aws/aws-cdk/issues/4316)
+* **java:** invalid collections returned with non-class elements ([#1197](https://github.com/aws/jsii/issues/1197)) ([bbc2302](https://github.com/aws/jsii/commit/bbc23029746038e34fdd572312cec218344a368a)), closes [#1196](https://github.com/aws/jsii/issues/1196)
+* **java:** maven-surefire-plugin 2.22.2 ([#1165](https://github.com/aws/jsii/issues/1165)) ([2f1f7b9](https://github.com/aws/jsii/commit/2f1f7b91f6405db8f992dc3331a5749b7f5fc9b3))
+* **java:** missing remarks in builder documentation ([#1111](https://github.com/aws/jsii/issues/1111)) ([33e820c](https://github.com/aws/jsii/commit/33e820c9252dd791a11eefdb2e6ad64f63facefd)), closes [#1094](https://github.com/aws/jsii/issues/1094)
+* **java:** remove Jackson confusion with certain patterns ([#1070](https://github.com/aws/jsii/issues/1070)) ([9eacbe3](https://github.com/aws/jsii/commit/9eacbe3476c471bf0528559bb602bcb1ede0904b)), closes [#987](https://github.com/aws/jsii/issues/987) [aws/aws-cdk#4080](https://github.com/aws/aws-cdk/issues/4080)
+* **java:** remove Jackson confusion with certain patterns ([#987](https://github.com/aws/jsii/issues/987)) ([a8096b7](https://github.com/aws/jsii/commit/a8096b7a68472067ec8d17c31b378f5841015b03)), closes [aws/aws-cdk#4080](https://github.com/aws/aws-cdk/issues/4080)
+* **java,dotnet:** abstract properties have concrete implementations ([#1128](https://github.com/aws/jsii/issues/1128)) ([c9351a3](https://github.com/aws/jsii/commit/c9351a3c477e778ec8a0ce1e34d262f39563e49d)), closes [#240](https://github.com/aws/jsii/issues/240) [#1011](https://github.com/aws/jsii/issues/1011)
+* **java,dotnet:** emit default implementations for optional properties ([#906](https://github.com/aws/jsii/issues/906)) ([37ddfd5](https://github.com/aws/jsii/commit/37ddfd5fde1399274ca1541542c7268b75e026c2)), closes [#543](https://github.com/aws/jsii/issues/543)
+* **jsii:** `--watch` causes immediate failure ([#1150](https://github.com/aws/jsii/issues/1150)) ([6bdf7d7](https://github.com/aws/jsii/commit/6bdf7d76873809279f7c01053d56cbacfd8f2b3d)), closes [#1149](https://github.com/aws/jsii/issues/1149)
+* **jsii:** Correct the 'types' attribute in package.json ([#876](https://github.com/aws/jsii/issues/876)) ([391a7ec](https://github.com/aws/jsii/commit/391a7eced5ca9dc31f1e203d1fb5056e20551696))
+* **jsii:** missing context on "Message" diagnostics ([#1298](https://github.com/aws/jsii/issues/1298)) ([c44f5f3](https://github.com/aws/jsii/commit/c44f5f30b77225e463d80c2e01e519e40d5601c5))
+* **jsii:** unable to depend on modules with private declarations ([#995](https://github.com/aws/jsii/issues/995)) ([08c4294](https://github.com/aws/jsii/commit/08c4294f270da1c0b1271ab8d119057d9626c03a)), closes [#994](https://github.com/aws/jsii/issues/994)
+* **jsii-diff:** add 'main' property to package.json ([#877](https://github.com/aws/jsii/issues/877)) ([670d94a](https://github.com/aws/jsii/commit/670d94a6815e2f06552e7249b4fbb771664a2a30))
+* **kernel:** cannot pass decorated structs to kernel as "any" ([#997](https://github.com/aws/jsii/issues/997)) ([2bd3183](https://github.com/aws/jsii/commit/2bd318358781c629085cbe594dfd0cc2b554f308)), closes [aws/aws-cdk#5066](https://github.com/aws/aws-cdk/issues/5066)
+* **kernel:** correct deserialization of structs in union contexts ([#919](https://github.com/aws/jsii/issues/919)) ([c0f338e](https://github.com/aws/jsii/commit/c0f338e289f6523f207bbdd3d9249a998bc370b9)), closes [#822](https://github.com/aws/jsii/issues/822) [aws/aws-cdk#3917](https://github.com/aws/aws-cdk/issues/3917) [aws/aws-cdk#2013](https://github.com/aws/aws-cdk/issues/2013)
+* **kernel:** correctly de-serialize mappings as JSON ([#968](https://github.com/aws/jsii/issues/968)) ([c731983](https://github.com/aws/jsii/commit/c731983f2dbf2f0064be9e1f5b01263cc4295208))
+* **kernel:** revert behavior change around `any` serialization ([#932](https://github.com/aws/jsii/issues/932)) ([2f47543](https://github.com/aws/jsii/commit/2f475437847b10377e5b91cc42bd752d1f2e06c4)), closes [#825](https://github.com/aws/jsii/issues/825)
+* **pacmak:** .NET build downloading packages from NuGet ([#949](https://github.com/aws/jsii/issues/949)) ([433d1f8](https://github.com/aws/jsii/commit/433d1f870e23d9881c847d79834ebd27cd640061))
+* **pacmak:** fix a couple of issues related to java generation ([#921](https://github.com/aws/jsii/issues/921)) ([5ad58c0](https://github.com/aws/jsii/commit/5ad58c0d3937e4a5fa5f5dfbb84f4be089727cba))
+* **pacmak:** generated dependencies are not consistent with source npm module ([#1141](https://github.com/aws/jsii/issues/1141)) ([03221fe](https://github.com/aws/jsii/commit/03221fe6c2b26414ac45fb693524701ec05509dc)), closes [#676](https://github.com/aws/jsii/issues/676) [#1137](https://github.com/aws/jsii/issues/1137)
+* **pacmak:** occasional EISDIR failure ([#948](https://github.com/aws/jsii/issues/948)) ([a388f24](https://github.com/aws/jsii/commit/a388f24b418b9b0053a09329c7a72be7207215f5))
+* **pacmak:** put package README into the right Python module ([#928](https://github.com/aws/jsii/issues/928)) ([17dd60f](https://github.com/aws/jsii/commit/17dd60f18142ec64849f3c03be46325fc3c6deff))
+* Move jsii-spec to Dependencies ([#1032](https://github.com/aws/jsii/issues/1032)) ([0581323](https://github.com/aws/jsii/commit/05813230903c3b10ad8a3ad304ada99011f8c865)), closes [#1030](https://github.com/aws/jsii/issues/1030)
+* **pacmak/python:** improve detection of twine ([#845](https://github.com/aws/jsii/issues/845)) ([2c4ef29](https://github.com/aws/jsii/commit/2c4ef2969997b21243bdf3c508d5df78f7308141))
+* **python:** clear error message when trying to serialize function ([#824](https://github.com/aws/jsii/issues/824)) ([2eb6422](https://github.com/aws/jsii/commit/2eb64223983de916fc38e9fc9977b2476189301c)), closes [aws/aws-cdk#4064](https://github.com/aws/aws-cdk/issues/4064)
+* **python:** correctly emit sligified positional args ([#1081](https://github.com/aws/jsii/issues/1081)) ([6f9167b](https://github.com/aws/jsii/commit/6f9167bc21fd5274d4e7c5e5442973d747f7dd94)), closes [aws/aws-cdk#4302](https://github.com/aws/aws-cdk/issues/4302)
+* **python:** correctly handle interface declarations on returned objects ([#980](https://github.com/aws/jsii/issues/980)) ([c2de100](https://github.com/aws/jsii/commit/c2de100ecdf30dacfbad94cb4ff071feb22b2fc2))
+* **python:** correctly handle nested structs-as-dict ([#973](https://github.com/aws/jsii/issues/973)) ([fe9d63e](https://github.com/aws/jsii/commit/fe9d63e1d4cf1dc65ddd95e3d24336fb130fd1bf))
+* **python:** correctly handle structs out of callbacks ([#1009](https://github.com/aws/jsii/issues/1009)) ([812d8c2](https://github.com/aws/jsii/commit/812d8c2fec948a507bcf488dd7387c6ce1b91b1a)), closes [#1003](https://github.com/aws/jsii/issues/1003) [#997](https://github.com/aws/jsii/issues/997) [#997](https://github.com/aws/jsii/issues/997) [#1003](https://github.com/aws/jsii/issues/1003)
+* **python:** members named property results in invalid code ([#1114](https://github.com/aws/jsii/issues/1114)) ([92be5d7](https://github.com/aws/jsii/commit/92be5d7f12cfccb5f7f3ba714b73a4db96f7d329)), closes [#1113](https://github.com/aws/jsii/issues/1113)
+* **python-runtime:** KernelResponse missing types ([#1332](https://github.com/aws/jsii/issues/1332)) ([fcafab4](https://github.com/aws/jsii/commit/fcafab48c97e14ba76585d186041b0e8af79cf3a))
+* **reflect:** failure to load assembly from "npm pack" ([#1117](https://github.com/aws/jsii/issues/1117)) ([a2b11f1](https://github.com/aws/jsii/commit/a2b11f19a826027be021ca815985c08461df618a))
+* **rosetta:** "Rosetta configured for live conversion to undefined" ([#1120](https://github.com/aws/jsii/issues/1120)) ([10e9d38](https://github.com/aws/jsii/commit/10e9d3863e36bc86afd57f399cb64c02a8f1df4d))
+* **rosetta:** crashes on behavioral interfaces ([#1169](https://github.com/aws/jsii/issues/1169)) ([5f3e9e0](https://github.com/aws/jsii/commit/5f3e9e048ba60b278627e9d4d69550bb10dadfd1))
+* **rosetta:** properly escape C# comments as XML ([#1184](https://github.com/aws/jsii/issues/1184)) ([2bdc589](https://github.com/aws/jsii/commit/2bdc589f105a90f394e85f0c9287f69b19c0b536))
+* Allow Missing Dotnet Version Suffix ([#1047](https://github.com/aws/jsii/issues/1047)) ([fc366d0](https://github.com/aws/jsii/commit/fc366d0a461473e1e6caeb85117098c708d191da)), closes [#1037](https://github.com/aws/jsii/issues/1037)
+* depend on python-3.8-supporting version of cattrs ([#1177](https://github.com/aws/jsii/issues/1177)) ([e9b00c8](https://github.com/aws/jsii/commit/e9b00c80c46968aecc2e51dbf822fbe8acecd1cb)), closes [#913](https://github.com/aws/jsii/issues/913)
+* generate non-overlapping artifacts ([#1104](https://github.com/aws/jsii/issues/1104)) ([2add627](https://github.com/aws/jsii/commit/2add6276f9490fdb25ee53a1b1a9ea8a85012a1b))
+* poor error message on scalar deserialization type mismatch ([#1187](https://github.com/aws/jsii/issues/1187)) ([fdf8927](https://github.com/aws/jsii/commit/fdf8927314a6953d4c206a0c69df510ddcc2eaf0))
+* **runtime:** make kernel 'load' operation synchronous ([#951](https://github.com/aws/jsii/issues/951)) ([896d688](https://github.com/aws/jsii/commit/896d688bd33b26e5af1a3f044cb5e47e5d304c03))
+* **runtime:** runtime crashes with EAGAIN trying to read from STDIN ([#1143](https://github.com/aws/jsii/issues/1143)) ([e3502ed](https://github.com/aws/jsii/commit/e3502ed4af3e17e9de7087c61fa9b8da6c05e1b0)), closes [#1142](https://github.com/aws/jsii/issues/1142) [aws/aws-cdk#5187](https://github.com/aws/aws-cdk/issues/5187)
+* **sampiler:** Add missing .npmignore ([#875](https://github.com/aws/jsii/issues/875)) ([b16fc6b](https://github.com/aws/jsii/commit/b16fc6bdaf1825d53629c2a44b769f924ffb91d0))
+* **superchain:** bad permissions on ~/.ssh/config ([#1139](https://github.com/aws/jsii/issues/1139)) ([eda462d](https://github.com/aws/jsii/commit/eda462df415330060efd3660f92cab22d6c5aace)), closes [#1138](https://github.com/aws/jsii/issues/1138)
 
 # [1.1.0](https://github.com/aws/jsii/compare/v1.0.0...v1.1.0) (2020-03-10)
 
