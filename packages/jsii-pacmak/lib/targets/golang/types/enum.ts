@@ -7,5 +7,7 @@ export class Enum extends GoType {
     super(type);
   }
 
-  public emit(_code: CodeMaker) {}
+  public emit(code: CodeMaker) {
+    code.line(`// enum ${this.localName}`);
+  }
 }

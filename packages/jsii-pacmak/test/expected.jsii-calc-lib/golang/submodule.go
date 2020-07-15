@@ -1,4 +1,3 @@
-package scopejsiicalclib
 
 // enum EnumFromScopedModule
 type IDoublable interface {

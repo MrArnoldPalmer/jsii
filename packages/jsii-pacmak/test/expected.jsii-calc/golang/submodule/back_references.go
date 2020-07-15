@@ -1,4 +1,3 @@
-package jsiicalc
 
 type AbstractClass struct {
     propFromInterface string
