@@ -7553,6 +7553,25 @@ class TopLevelStruct():
         return 'TopLevelStruct(%s)' % ', '.join(k + '=' + repr(v) for k, v in self._values.items())
 
 
+class UmaskCheck(metaclass=jsii.JSIIMeta, jsii_type="jsii-calc.UmaskCheck"):
+    """Checks the current file permissions are cool (no funky UMASK down-scoping happened).
+
+    see
+    :see: https://github.com/aws/jsii/issues/1765
+    stability
+    :stability: experimental
+    """
+    @jsii.member(jsii_name="mode")
+    @builtins.classmethod
+    def mode(cls) -> jsii.Number:
+        """This should return 0o644 (-rw-r--r--).
+
+        stability
+        :stability: experimental
+        """
+        return jsii.sinvoke(cls, "mode", [])
+
+
 class UnaryOperation(scope.jsii_calc_lib.Operation, metaclass=jsii.JSIIAbstractClass, jsii_type="jsii-calc.UnaryOperation"):
     """An operation on a single operand.
 
@@ -8782,6 +8801,7 @@ __all__ = [
     "SyncVirtualMethods",
     "Thrower",
     "TopLevelStruct",
+    "UmaskCheck",
     "UnaryOperation",
     "UnionProperties",
     "UpcasingReflectable",

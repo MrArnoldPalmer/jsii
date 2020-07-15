@@ -11873,6 +11873,40 @@
         }
       ]
     },
+    "jsii-calc.UmaskCheck": {
+      "assembly": "jsii-calc",
+      "docs": {
+        "see": "https://github.com/aws/jsii/issues/1765",
+        "stability": "experimental",
+        "summary": "Checks the current file permissions are cool (no funky UMASK down-scoping happened)."
+      },
+      "fqn": "jsii-calc.UmaskCheck",
+      "kind": "class",
+      "locationInModule": {
+        "filename": "lib/compliance.ts",
+        "line": 2511
+      },
+      "methods": [
+        {
+          "docs": {
+            "stability": "experimental",
+            "summary": "This should return 0o644 (-rw-r--r--)."
+          },
+          "locationInModule": {
+            "filename": "lib/compliance.ts",
+            "line": 2515
+          },
+          "name": "mode",
+          "returns": {
+            "type": {
+              "primitive": "number"
+            }
+          },
+          "static": true
+        }
+      ],
+      "name": "UmaskCheck"
+    },
     "jsii-calc.UnaryOperation": {
       "abstract": true,
       "assembly": "jsii-calc",
@@ -12759,7 +12793,15 @@
       "initializer": {
         "docs": {
           "stability": "experimental"
-        }
+        },
+        "parameters": [
+          {
+            "name": "props",
+            "type": {
+              "fqn": "jsii-calc.submodule.child.SomeStruct"
+            }
+          }
+        ]
       },
       "interfaces": [
         "jsii-calc.submodule.nested_submodule.deeplyNested.INamespaced"
@@ -12813,6 +12855,20 @@
           "name": "goodness",
           "type": {
             "fqn": "jsii-calc.submodule.child.Goodness"
+          }
+        },
+        {
+          "docs": {
+            "stability": "experimental"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/submodule/my-class.ts",
+            "line": 11
+          },
+          "name": "props",
+          "type": {
+            "fqn": "jsii-calc.submodule.child.SomeStruct"
           }
         },
         {
@@ -13166,5 +13222,5 @@
     }
   },
   "version": "0.0.0",
-  "fingerprint": "WdFD02mRrBZaKXT1erhd6fi+1V5/bpaeGuNZWxNuRdk="
+  "fingerprint": "d/XLcy+kh4JgFEj3yoK5e9CcyeJ1L4cirumLeeUMmx0="
 }
