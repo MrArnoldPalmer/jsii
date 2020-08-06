@@ -1,18 +1,29 @@
 import { TypeReference } from 'jsii-reflect';
-import { PackageTypes } from '../package-context';
+import { Module, RootModule } from '../module';
 import { GoType } from './go-type';
 
-// TODO: Can we subclass TypeReference effectively?
-export class GoTypeReference {
+export class GoTypeRef {
   public constructor(
-    public reference: TypeReference,
-    public packageTypes: PackageTypes,
+    public readonly root: RootModule,
+    public readonly reference: TypeReference,
   ) {}
 
-  public resolve(): GoType | undefined {
-    if (this.reference.fqn) {
-      return this.packageTypes[this.reference.fqn];
+  public get type(): GoType {
+    return this.root.findType(this.reference.fqn!);
+  }
+
+  public get name() {
+    return this.type.name;
+  }
+
+  public get namespace() {
+    return this.type.parent.packageName;
+  }
+
+  public scopedName(scope: Module) {
+    if (scope.packageName === this.namespace) {
+      return this.name;
     }
-    return undefined;
+    return `${this.namespace}.${this.name}`;
   }
 }

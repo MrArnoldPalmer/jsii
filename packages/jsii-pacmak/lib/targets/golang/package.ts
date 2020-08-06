@@ -1,19 +1,18 @@
 import { CodeMaker } from 'codemaker';
 import { Assembly } from 'jsii-reflect';
-import { join } from 'path';
 import { EmitContext } from './emit-context';
 import { ReadmeFile } from './readme-file';
-import { Module, Submodule } from './module';
+import { Module, RootModule, Submodule } from './module';
 
 export class Package {
   public readonly packageName: string;
-  public readonly rootModule: Module;
+  public readonly rootModule: RootModule;
 
   public constructor(public readonly assembly: Assembly) {
     this.packageName = this.assembly.name
       .replace('@', '')
       .replace(/[^a-z0-9_.]/gi, '');
-    this.rootModule = new Module(assembly);
+    this.rootModule = new RootModule(assembly);
   }
 
   public emit({ code }: EmitContext): void {
@@ -21,14 +20,7 @@ export class Package {
       new ReadmeFile(this.packageName, this.assembly.readme.markdown);
     }
 
-    const packageFile = `${join(...this.packageName.split('.'))}.go`;
-    code.openFile(packageFile);
-    code.line(`package ${this.packageName}`);
-    code.line();
     this.rootModule.emit(code);
-    code.closeFile(packageFile);
-
-    this.emitSubmodules(code, this.rootModule);
   }
 
   public emitSubmodules(
@@ -37,10 +29,12 @@ export class Package {
     parentPath = '',
   ): void {
     parent.submodules.forEach((submodule: Submodule) => {
-      const nextPath = `${parentPath}/${submodule.name}`;
+      const nextPath = `${parentPath}/${submodule.packageName}`;
+      const packageName = nextPath.replace(/^\//, '');
       const filename = `${nextPath}.go`;
 
       code.openFile(filename);
+      code.line(`package ${packageName}`);
       code.line();
       submodule.emit(code);
       code.closeFile(filename);
