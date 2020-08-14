@@ -54,6 +54,43 @@ export class ClassMethod extends ClassField {
     code.closeBlock();
     code.line();
   }
+
+  // public emit({ code }: GoEmitContext): void {
+  //   code.openBlock(`type ${this.localName()} struct`);
+
+  //   Object.values(this.type.getProperties()).forEach((property) =>
+  //     this.emitClassProperty(code, property),
+  //   );
+
+  //   code.closeBlock();
+  //   code.line();
+
+  //   Object.values(this.type.getMethods()).forEach((method) =>
+  //     this.emitClassMethod(code, method),
+  //   );
+  // }
+
+  // private emitClassProperty(code: CodeMaker, property: Property) {
+  //   const type = new TypeMapper(property.type).emit();
+
+  //   code.line(`${property.name} ${type}`);
+  // }
+
+  // private emitClassMethod(code: CodeMaker, method: Method) {
+  //   const returns = method.returns.type.void
+  //     ? ''
+  //     : ` ${new TypeMapper(method.returns.type).emit()}`;
+  //   const instanceArg = this.localName().substring(0, 1);
+
+  //   // TODO: Method Arguments
+  //   // NOTE: May need to capitalize method name
+  //   code.openBlock(
+  //     `func (${instanceArg} *${this.localName()}) ${method.name}()${returns}`,
+  //   );
+  //   code.line(`// jsiiruntime.methodcall(${instanceArg})`);
+  //   code.closeBlock();
+  //   code.line();
+  // }
 }
 
 /*
