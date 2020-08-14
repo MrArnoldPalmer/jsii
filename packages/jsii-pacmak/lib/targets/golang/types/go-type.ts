@@ -2,11 +2,6 @@ import { CodeMaker } from 'codemaker';
 import { Type } from 'jsii-reflect';
 import { Module } from '../module';
 
-export interface GoEmitContext {
-  code: CodeMaker;
-  // context?: Module;
-}
-
 export interface GoEmitter {
   emit(code: CodeMaker): void;
 }
