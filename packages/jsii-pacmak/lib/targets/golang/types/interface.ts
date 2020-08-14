@@ -29,9 +29,9 @@ export class InterfaceProperty implements InterfaceField {
       this?.references?.scopedName(this.parent.parent) ??
       this.property.toString();
 
-    code.line(`get${name}() ${type}`);
+    code.line(`Get${name}() ${type}`);
     if (!this.property.protected) {
-      code.line(`set${name}()`);
+      code.line(`Set${name}()`);
     }
   }
 }
@@ -55,7 +55,7 @@ export class InterfaceMethod implements InterfaceField {
       ? ''
       : this?.references?.scopedName(this.parent.parent) ??
         this.method.returns.toString();
-    code.line(`${this.method.name}()${returns}`);
+    code.line(`${code.toPascalCase(this.name)}()${returns}`);
   }
 }
 

@@ -46,7 +46,6 @@ export class ClassMethod extends ClassField {
     const instanceArg = this.parent.name.substring(0, 1);
 
     // TODO: Method Arguments
-    // NOTE: May need to capitalize method name
     code.openBlock(
       `func (${instanceArg} *${this.parent.name}) ${name}()${type}`,
     );
@@ -55,6 +54,8 @@ export class ClassMethod extends ClassField {
     code.line();
   }
 }
+
+const CLASS_INTERFACE_SUFFIX = 'Iface';
 
 /*
  * Class wraps a Typescript class as a Go custom struct type  TODO rename?
@@ -78,6 +79,7 @@ export class GoClass extends GoType implements GoEmitter {
   public emit(code: CodeMaker): void {
     code.openBlock(`type ${this.name} struct`);
 
+    this.emitClassInterface(code);
     this.properties.forEach((property) => property.emit(code));
 
     code.closeBlock();
@@ -85,6 +87,14 @@ export class GoClass extends GoType implements GoEmitter {
 
     this.methods.forEach((method) => method.emit(code));
 
+    code.line();
+  }
+
+  // Generate interface that defines getters for public properties and any method signatures
+  private emitClassInterface(code: CodeMaker) {
+    const interfaceName = this.name + CLASS_INTERFACE_SUFFIX;
+    code.openBlock(`type ${interfaceName} interface`);
+    code.closeBlock();
     code.line();
   }
 

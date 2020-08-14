@@ -1,6 +1,9 @@
 package scopejsiicalclib
 
+<<<<<<< HEAD
 // enum EnumFromScopedModule
+=======
+>>>>>>> 20ab90cb60df3fd7fadd18144f71c1f280928f15
 type IDoublable interface {
     getdoublevalue() number
     setdoublevalue()
