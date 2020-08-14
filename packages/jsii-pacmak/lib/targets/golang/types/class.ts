@@ -77,9 +77,10 @@ export class GoClass extends GoType implements GoEmitter {
   }
 
   public emit(code: CodeMaker): void {
+    this.emitClassInterface(code);
+
     code.openBlock(`type ${this.name} struct`);
 
-    this.emitClassInterface(code);
     this.properties.forEach((property) => property.emit(code));
 
     code.closeBlock();
