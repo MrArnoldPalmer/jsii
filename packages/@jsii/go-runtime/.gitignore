@@ -1,4 +1,4 @@
-jsii-experimental/embedded/*
+assets/*
 jsii-calc
 
-!jsii-experimental/embedded/.gitkeep
+!assets/.gitkeep

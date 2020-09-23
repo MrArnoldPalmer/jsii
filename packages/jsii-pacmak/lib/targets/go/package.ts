@@ -5,9 +5,12 @@ import { Type, Submodule as JsiiSubmodule } from 'jsii-reflect';
 import { EmitContext } from './emit-context';
 import { GoClass, GoType, Enum, Interface, Struct } from './types';
 import { findTypeInTree, goPackageName, flatMap } from './util';
-
-// JSII go runtime module name
-const JSII_MODULE_NAME = 'github.com/aws-cdk/jsii/jsii-experimental';
+import {
+  JSII_EMBEDDED_MODULE_NAME,
+  JSII_MODULE_NAME,
+  JSII_RT_ALIAS,
+  ModuleLoad,
+} from './runtime';
 
 /*
  * Package represents a single `.go` source file within a package. This can be the root package file or a submodule
@@ -104,9 +107,9 @@ export abstract class Package {
     code.line();
   }
 
-  private emitImports(code: CodeMaker) {
+  protected emitImports(code: CodeMaker) {
     code.open('import (');
-    code.line(`"${JSII_MODULE_NAME}"`);
+    code.line(`${JSII_RT_ALIAS} "${JSII_MODULE_NAME}"`);
 
     for (const packageName of this.dependencyImports) {
       // If the module is the same as the current one being written, don't emit an import statement
@@ -119,7 +122,7 @@ export abstract class Package {
     code.line();
   }
 
-  private emitTypes(context: EmitContext) {
+  protected emitTypes(context: EmitContext) {
     for (const type of this.types) {
       type.emit(context);
     }
@@ -159,9 +162,25 @@ export class RootPackage extends Package {
   }
 
   public emit(context: EmitContext): void {
-    super.emit(context);
+    const { code } = context;
+    code.openFile(this.file);
+    this.emitHeader(code);
+    this.emitImports(code);
+    this.emitLoadFunction(context);
+    this.emitTypes(context);
+    code.closeFile(this.file);
+
+    this.emitInternalPackages(context);
 
     this.readme?.emit(context);
+  }
+
+  private emitLoadFunction(context: EmitContext): void {
+    new ModuleLoad(
+      this.assembly.name,
+      this.assembly.version,
+      this.packageDependencies.map((pack) => pack.packageName),
+    ).emit(context);
   }
 
   /*
@@ -179,6 +198,24 @@ export class RootPackage extends Package {
       },
       super.findType(fqn),
     );
+  }
+
+  /*
+   * Override with known package imports for root package, used for load call functionality */
+  public get dependencyImports(): Set<string> {
+    return new Set([
+      ...super.dependencyImports,
+      this.tarballDependency,
+      'io/ioutil',
+      'sync',
+    ]);
+  }
+
+  /*
+   * Get full path to embedded tarball module
+   */
+  private get tarballDependency(): string {
+    return `${this.moduleName}/${this.packageName}/${JSII_EMBEDDED_MODULE_NAME}`;
   }
 
   /*

@@ -4,16 +4,19 @@ import (
 	"bufio"
 	"encoding/json"
 	"errors"
+	"github.com/aws-cdk/jsii/assets"
 	"io"
 	"io/ioutil"
-	"log"
+	"os"
 	"os/exec"
 	"regexp"
+	"time"
 )
 
-type Any interface{}
-
-type Client struct {
+// client is the data structure responsible for intializing and managing the
+// JSII kernel process. It has handles for writing and reading JSON to/from
+// the processes STDIN and STDOUT.
+type client struct {
 	Process        *exec.Cmd
 	RuntimeVersion string
 	writer         *json.Encoder
@@ -21,39 +24,51 @@ type Client struct {
 	stderr         io.ReadCloser
 }
 
-func CheckFatalError(e error) {
-	if e != nil {
-		log.Fatal(e)
+// initClient starts the kernel child process and verifies that the runtime has
+// intialized properly.
+func initClient() (client, error) {
+	clientinstance := client{}
+	tmpfile, err := ioutil.TempFile("", "jsii-runtime.*.js")
+	if err != nil {
+		return clientinstance, err
 	}
-}
 
-func InitClient() (Client, error) {
-	cmd := exec.Command("node", "./embedded/jsii-runtime.js")
+	defer os.Remove(tmpfile.Name())
+
+	if _, err := tmpfile.Write([]byte(assets.Tarball)); err != nil {
+		return clientinstance, err
+	}
+
+	if err := tmpfile.Close(); err != nil {
+		return clientinstance, err
+	}
+
+	cmd := exec.Command("node", "--require", tmpfile.Name())
 
 	out, err := cmd.StdoutPipe()
 	if err != nil {
-		return Client{}, err
+		return clientinstance, err
 	}
 
 	in, err := cmd.StdinPipe()
 	if err != nil {
-		return Client{}, err
+		return clientinstance, err
 	}
 
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
-		return Client{}, err
+		return clientinstance, err
 	}
 
 	// Start Process
 	if err := cmd.Start(); err != nil {
-		return Client{}, err
+		return clientinstance, err
 	}
 
 	writer := json.NewEncoder(in)
 	reader := json.NewDecoder(out)
 
-	client := Client{
+	clientinstance = client{
 		Process: cmd,
 		writer:  writer,
 		reader:  reader,
@@ -61,17 +76,20 @@ func InitClient() (Client, error) {
 	}
 
 	// Check for OK response and parse runtime version
-	rtver, err := client.validateClientStart()
+	rtver, err := clientinstance.validateClientStart()
 
 	if err != nil {
-		return Client{}, err
+		return client{}, err
 	}
 
-	client.RuntimeVersion = rtver
-	return client, nil
+	clientinstance.RuntimeVersion = rtver
+	return clientinstance, nil
 }
 
-func (c *Client) request(req KernelRequest, res KernelResponse) error {
+// request accepts a KernelRequest struct which is encoded into a JSON string
+// and written to the kernel processess' STDIN. It also accepts a pointer to a
+// struct that is used for the output.
+func (c *client) request(req KernelRequest, res KernelResponse) error {
 	err := c.writer.Encode(req)
 	if err != nil {
 		return err
@@ -80,7 +98,14 @@ func (c *Client) request(req KernelRequest, res KernelResponse) error {
 	return c.response(res)
 }
 
-func (c *Client) response(res KernelResponse) error {
+// response attempts to read a json value from the kernel processess' STDOUT and
+// decode it into the passed response struct. If no value is found on STDOUT and
+// STDERR has content, it will read the output of STDERR and return an error
+// with that content as the error message.
+func (c *client) response(res KernelResponse) error {
+	// TODO: identify source of this race condition
+	// Runtime locks without this timeout currently
+	time.Sleep(time.Millisecond * 100)
 	if c.reader.More() {
 		return c.reader.Decode(res)
 	}
@@ -100,7 +125,10 @@ func (c *Client) response(res KernelResponse) error {
 
 }
 
-func (c *Client) validateClientStart() (string, error) {
+// validateClientStart verifies that the expected response is written to the
+// process STDOUT after initialization. It parses the version of the kernel
+// runtime returned on the initial output.
+func (c *client) validateClientStart() (string, error) {
 	response := InitOkResponse{}
 
 	if err := c.response(&response); err != nil {
@@ -109,9 +137,4 @@ func (c *Client) validateClientStart() (string, error) {
 
 	version := regexp.MustCompile("@").Split(response.Hello, 3)[2]
 	return version, nil
-}
-
-func (c *Client) load(request LoadRequest) (LoadResponse, error) {
-	response := LoadResponse{}
-	return response, c.request(request, &response)
 }
