@@ -1,12 +1,11 @@
 import { CodeMaker } from 'codemaker';
 
-import { ClassMethod, Struct } from '../types';
+import { ClassMethod } from '../types';
 import {
-  NOOP_RETURN_MAP,
   JSII_INVOKE_FUNC,
   JSII_SINVOKE_FUNC,
 } from './constants';
-import { emitInitialization } from './util';
+import { slugify, emitInitialization } from './util';
 
 export class MethodCall {
   public constructor(public readonly parent: ClassMethod) {}
@@ -20,50 +19,64 @@ export class MethodCall {
   }
 
   private emitDynamic(code: CodeMaker) {
-    code.line(`returns := ""`);
+    if (this.returnType) {
+      code.line(`var ${this.returnVarName} ${this.returnType}`);
+    } else {
+      code.line(`var ${this.returnVarName} interface{}`);
+    }
+
     code.open(`${JSII_INVOKE_FUNC}(`);
 
     code.line(`${this.parent.instanceArg},`);
     code.line(`"${this.parent.method.name}",`);
     code.line(`${this.argsString},`);
+    code.line(`${this.returnType ? 'true' : 'false'},`);
     code.line(`&returns,`);
 
     code.close(`)`);
 
-    this.emitReturnStatement(code);
+    if (this.returnType) {
+      code.line(`return ${this.returnVarName}`);
+    }
   }
 
   private emitStatic(code: CodeMaker) {
     emitInitialization(code);
-    code.line(`returns := ""`);
+    if (this.returnType) {
+      code.line(`var ${this.returnVarName} ${this.returnType}`);
+    } else {
+      code.line(`var ${this.returnVarName} interface{}`);
+    }
+
     code.open(`${JSII_SINVOKE_FUNC}(`);
 
     code.line(`"${this.parent.parent.fqn}",`);
     code.line(`"${this.parent.method.name}",`);
     code.line(`${this.argsString},`);
+    code.line(`${this.returnType ? 'true' : 'false'},`);
     code.line(`&returns,`);
 
     code.close(`)`);
 
-    this.emitReturnStatement(code);
-  }
-
-  private getDummyReturn(type: string): string {
-    return NOOP_RETURN_MAP[type] || 'nil';
-  }
-
-  protected emitReturnStatement(code: CodeMaker) {
-    const ret = this.parent.reference;
-    if (ret?.void) {
-      // don't emit a return statement if function doesn't return a value
-      return;
-    } else if (ret?.type?.type.isClassType() || ret?.type instanceof Struct) {
-      code.line(`return ${this.parent.returnType}{}`);
-    } else if (ret?.type?.type.isEnumType()) {
-      code.line(`return "ENUM_DUMMY"`);
-    } else {
-      code.line(`return ${this.getDummyReturn(this.parent.returnType)}`);
+    if (this.returnType) {
+      code.line(`return ${this.returnVarName}`);
     }
+  }
+
+  private get returnVarName(): string {
+    return slugify('returns', this.parent.parameters.map(p => p.name));
+  }
+
+  private get returnsVal(): boolean {
+    return Boolean(this.parent.reference && !this.parent.reference.void);
+  }
+
+  protected get returnType(): string | undefined {
+    if (this.returnsVal) {
+      return this.parent.returnType
+    }
+
+    return
   }
 
   private get inStatic(): boolean {

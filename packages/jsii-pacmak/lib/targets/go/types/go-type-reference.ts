@@ -3,7 +3,6 @@ import { TypeReference } from 'jsii-reflect';
 
 import * as log from '../../../logging';
 import { Package } from '../package';
-import { JSII_ANY } from '../runtime';
 import { GoType } from './go-type';
 
 /*
@@ -13,10 +12,10 @@ class PrimitiveMapper {
   private readonly MAP: { [key: string]: string } = {
     number: 'float64',
     boolean: 'bool',
-    any: JSII_ANY,
+    any: 'interface{}',
     // TODO: Resolve "time" package dependency where needed and change to "time.Time"
     date: 'string',
-    json: `map[string]${JSII_ANY}`,
+    json: `map[string]interface{}`,
   };
 
   public constructor(private readonly name: string) {}
@@ -47,6 +46,17 @@ export class GoTypeRef {
     return undefined;
   }
 
+  public get primitiveType(): string | undefined {
+    if (this.reference.primitive) {
+      const val = new PrimitiveMapper(this.reference.primitive).goPrimitive;
+      if (!val) {
+        console.log(this.reference.primitive)
+      }
+    }
+
+    return;
+  }
+
   public get name() {
     return this.type?.name;
   }
@@ -63,8 +73,8 @@ export class GoTypeRef {
    * Return the name of a type for reference from the `Package` passed in
    */
   public scopedName(scope: Package): string {
-    if (this.reference.primitive) {
-      return new PrimitiveMapper(this.reference.primitive).goPrimitive;
+    if (this.primitiveType) {
+      return this.primitiveType;
     }
 
     // type is an array
@@ -72,7 +82,7 @@ export class GoTypeRef {
       const innerName =
         new GoTypeRef(this.root, this.reference.arrayOfType).scopedName(
           scope,
-        ) ?? JSII_ANY;
+        ) ?? 'interface{}';
 
       return `[]${innerName}`;
     }
@@ -81,7 +91,7 @@ export class GoTypeRef {
     if (this.reference.mapOfType) {
       const innerName =
         new GoTypeRef(this.root, this.reference.mapOfType).scopedName(scope) ??
-        JSII_ANY;
+        'interface{}';
       return `map[string]${innerName}`;
     }
 
@@ -98,8 +108,8 @@ export class GoTypeRef {
 
     // type isn't handled
     log.debug(
-      `Type ${this.name} does not resolve to a known Go type. It is being mapped to "Any".`,
+      `Type ${this.name} does not resolve to a known Go type. It is being mapped to "interface{}".`,
     );
-    return JSII_ANY;
+    return 'interface{}';
   }
 }

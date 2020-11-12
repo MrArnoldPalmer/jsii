@@ -1,11 +1,11 @@
-import { toPascalCase } from 'codemaker';
-import { Method, Parameter, Property } from 'jsii-reflect';
+import {toPascalCase} from 'codemaker';
+import {Method, Parameter, Property} from 'jsii-reflect';
 
-import { EmitContext } from '../emit-context';
-import { GetProperty, SetProperty } from '../runtime';
-import { substituteReservedWords } from '../util';
+import {EmitContext} from '../emit-context';
+import {GetProperty, SetProperty} from '../runtime';
+import {substituteReservedWords} from '../util';
 
-import { GoClass, GoStruct, Interface, Struct, GoTypeRef } from './index';
+import {GoClass, GoStruct, Interface, Struct, GoTypeRef} from './index';
 
 /*
  * Structure for Class and Interface methods. Useful for sharing logic for dependency resolution
@@ -71,23 +71,21 @@ export class GoProperty implements GoTypeMember {
     if (docs) {
       context.documenter.emit(docs);
     }
-    const { code } = context;
-    // If struct property is type of parent struct, use a pointer as type to avoid recursive struct type error
-    if (this.reference?.type?.name === this.parent.name) {
-      code.line(`${this.name} *${this.returnType}`);
-    } else {
-      code.line(`${this.name} ${this.returnType}`);
-    }
+    const {code} = context;
+    const memberType = this.reference?.type?.name === this.parent.name ? `*${this.returnType}` : this.returnType;
+
+    // Adds json tags for easy deserialization
+    code.line(`${this.name} ${memberType} \`json:"${this.property.name}"\``);
     // TODO add newline if not the last member
   }
 
   public emitGetterDecl(context: EmitContext) {
-    const { code } = context;
+    const {code} = context;
     code.line(`${this.getter}() ${this.returnType}`);
   }
 
   public emitSetterDecl(context: EmitContext) {
-    const { code } = context;
+    const {code} = context;
     if (!this.property.protected && !this.immutable) {
       code.line(`Set${this.name}(val ${this.returnType})`);
     }
@@ -95,30 +93,25 @@ export class GoProperty implements GoTypeMember {
 
   // Emits getter methods on the struct for each property
   public emitGetterImpl(context: EmitContext) {
-    const { code } = context;
+    const {code} = context;
     const receiver = this.parent.name;
     const instanceArg = receiver.substring(0, 1).toLowerCase();
 
     code.openBlock(
       `func (${instanceArg} *${receiver}) ${
-        this.getter
+      this.getter
       }()${` ${this.returnType}`}`,
     );
 
     new GetProperty(this).emit(code);
 
-    if (this.parent.name === this.returnType) {
-      code.line(`return *${instanceArg}.${this.name}`);
-    } else {
-      code.line(`return ${instanceArg}.${this.name}`);
-    }
     code.closeBlock();
     code.line();
   }
 
   public emitSetterImpl(context: EmitContext) {
     if (!this.immutable) {
-      const { code } = context;
+      const {code} = context;
       const receiver = this.parent.name;
       const instanceArg = receiver.substring(0, 1).toLowerCase();
 
