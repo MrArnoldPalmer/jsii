@@ -201,9 +201,6 @@ func (c *client) processHello() (string, error) {
 }
 
 func (c *client) findObjectRef(obj interface{}) (refid string, ok bool) {
-  fmt.Printf("Pointer obj: %s\n", obj)
-  fmt.Printf("Pointer addr: %p\n", obj)
-  fmt.Println(c.objects)
 	refid, ok = c.objects[obj]
 	return
 }

@@ -228,6 +228,7 @@ func castSetToPtr(ptr interface{}, data interface{}) {
 		}
 	} else if isRef {
 		// If return data is JSII object references, add to objects table.
+                fmt.Println(reflect.TypeOf(ptr))
 		client := getClient()
 		client.objects[ptr] = ref.JsiiInstanceId
 	} else {

@@ -17,7 +17,8 @@ func TestMain(m *testing.M) {
 
 func TestCalculator(t *testing.T) {
 	var initialValue float64 = 10
-	calculator := calc.NewCalculator(calc.CalculatorProps{InitialValue: initialValue, MaximumValue: math.MaxFloat64})
+        calculatorProps := calc.CalculatorProps{InitialValue: initialValue, MaximumValue: math.MaxFloat64}
+	calculator := calc.NewCalculator(&calculatorProps)
 
 	t.Run("Primitive Property Access", func(t *testing.T) {
 		actual := calculator.GetValue()
