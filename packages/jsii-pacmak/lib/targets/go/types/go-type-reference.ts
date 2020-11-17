@@ -50,11 +50,15 @@ export class GoTypeRef {
     if (this.reference.primitive) {
       const val = new PrimitiveMapper(this.reference.primitive).goPrimitive;
       if (!val) {
-        console.log(this.reference.primitive)
+        console.log(this.reference.primitive);
       }
     }
 
     return;
+  }
+
+  public get interfaceName() {
+    return this.type?.interfaceName;
   }
 
   public get name() {
@@ -72,7 +76,7 @@ export class GoTypeRef {
   /*
    * Return the name of a type for reference from the `Package` passed in
    */
-  public scopedName(scope: Package): string {
+  public scopedName(scope: Package, asInterface = false): string {
     if (this.primitiveType) {
       return this.primitiveType;
     }
@@ -82,6 +86,7 @@ export class GoTypeRef {
       const innerName =
         new GoTypeRef(this.root, this.reference.arrayOfType).scopedName(
           scope,
+          asInterface,
         ) ?? 'interface{}';
 
       return `[]${innerName}`;
@@ -90,25 +95,27 @@ export class GoTypeRef {
     // type is a map
     if (this.reference.mapOfType) {
       const innerName =
-        new GoTypeRef(this.root, this.reference.mapOfType).scopedName(scope) ??
-        'interface{}';
+        new GoTypeRef(this.root, this.reference.mapOfType).scopedName(
+          scope,
+          asInterface,
+        ) ?? 'interface{}';
       return `map[string]${innerName}`;
     }
 
     // type is defined in the same scope as the current one, no namespace required
-    if (scope.packageName === this.namespace && this.name) {
+    if (scope.packageName === this.namespace && this.interfaceName) {
       // if the current scope is the same as the types scope, return without a namespace
-      return toPascalCase(this.name);
+      return toPascalCase(this.interfaceName);
     }
 
     // type is defined in another module and requires a namespace and import
-    if (this.name) {
-      return `${this.namespace}.${toPascalCase(this.name)}`;
+    if (this.interfaceName) {
+      return `${this.namespace}.${toPascalCase(this.interfaceName)}`;
     }
 
     // type isn't handled
     log.debug(
-      `Type ${this.name} does not resolve to a known Go type. It is being mapped to "interface{}".`,
+      `Type ${this.interfaceName} does not resolve to a known Go type. It is being mapped to "interface{}".`,
     );
     return 'interface{}';
   }

@@ -91,7 +91,7 @@ export class GoClass extends GoStruct {
 
     // embed extended interfaces
     for (const iface of this.extends) {
-      code.line(iface.scopedName(this.pkg));
+      code.line(iface.scopedName(this.pkg, true));
     }
 
     for (const property of this.properties) {
@@ -232,6 +232,13 @@ export class ClassMethod extends GoMethod {
   }
 
   public get returnType(): string {
+    return (
+      this.reference?.scopedName(this.parent.pkg, true) ??
+      this.method.toString()
+    );
+  }
+
+  public get concreteReturnType(): string {
     return (
       this.reference?.scopedName(this.parent.pkg) ?? this.method.toString()
     );

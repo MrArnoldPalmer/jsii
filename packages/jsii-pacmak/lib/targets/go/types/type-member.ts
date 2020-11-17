@@ -1,11 +1,11 @@
-import {toPascalCase} from 'codemaker';
-import {Method, Parameter, Property} from 'jsii-reflect';
+import { toPascalCase } from 'codemaker';
+import { Method, Parameter, Property } from 'jsii-reflect';
 
-import {EmitContext} from '../emit-context';
-import {GetProperty, SetProperty} from '../runtime';
-import {substituteReservedWords} from '../util';
+import { EmitContext } from '../emit-context';
+import { GetProperty, SetProperty } from '../runtime';
+import { substituteReservedWords } from '../util';
 
-import {GoClass, GoStruct, Interface, Struct, GoTypeRef} from './index';
+import { GoClass, GoStruct, Interface, Struct, GoTypeRef } from './index';
 
 /*
  * Structure for Class and Interface methods. Useful for sharing logic for dependency resolution
@@ -57,7 +57,7 @@ export class GoProperty implements GoTypeMember {
 
   public get returnType(): string {
     return (
-      this.reference?.scopedName(this.parent.pkg) ??
+      this.reference?.scopedName(this.parent.pkg, true) ??
       this.property.type.toString()
     );
   }
@@ -71,8 +71,11 @@ export class GoProperty implements GoTypeMember {
     if (docs) {
       context.documenter.emit(docs);
     }
-    const {code} = context;
-    const memberType = this.reference?.type?.name === this.parent.name ? `*${this.returnType}` : this.returnType;
+    const { code } = context;
+    const memberType =
+      this.reference?.type?.name === this.parent.name
+        ? `*${this.returnType}`
+        : this.returnType;
 
     // Adds json tags for easy deserialization
     code.line(`${this.name} ${memberType} \`json:"${this.property.name}"\``);
@@ -80,12 +83,12 @@ export class GoProperty implements GoTypeMember {
   }
 
   public emitGetterDecl(context: EmitContext) {
-    const {code} = context;
+    const { code } = context;
     code.line(`${this.getter}() ${this.returnType}`);
   }
 
   public emitSetterDecl(context: EmitContext) {
-    const {code} = context;
+    const { code } = context;
     if (!this.property.protected && !this.immutable) {
       code.line(`Set${this.name}(val ${this.returnType})`);
     }
@@ -93,13 +96,13 @@ export class GoProperty implements GoTypeMember {
 
   // Emits getter methods on the struct for each property
   public emitGetterImpl(context: EmitContext) {
-    const {code} = context;
+    const { code } = context;
     const receiver = this.parent.name;
     const instanceArg = receiver.substring(0, 1).toLowerCase();
 
     code.openBlock(
       `func (${instanceArg} *${receiver}) ${
-      this.getter
+        this.getter
       }()${` ${this.returnType}`}`,
     );
 
@@ -111,7 +114,7 @@ export class GoProperty implements GoTypeMember {
 
   public emitSetterImpl(context: EmitContext) {
     if (!this.immutable) {
-      const {code} = context;
+      const { code } = context;
       const receiver = this.parent.name;
       const instanceArg = receiver.substring(0, 1).toLowerCase();
 
@@ -158,7 +161,8 @@ export abstract class GoMethod implements GoTypeMember {
   public get returnType(): string {
     const ret = this.method.returns.type.void
       ? ''
-      : this.reference?.scopedName(this.parent.pkg) ?? this.method.toString();
+      : this.reference?.scopedName(this.parent.pkg, true) ??
+        this.method.toString();
     if (ret !== '') {
       return ` ${ret}`;
     }
@@ -185,7 +189,7 @@ export class GoParameter {
   }
 
   public toString(): string {
-    const paramType = this.reference.scopedName(this.parent.pkg);
+    const paramType = this.reference.scopedName(this.parent.pkg, true);
     return `${this.name} ${paramType}`;
   }
 }

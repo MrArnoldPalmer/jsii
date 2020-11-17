@@ -30,7 +30,7 @@ export class Interface extends GoType {
 
     // embed extended interfaces
     for (const iface of this.extends) {
-      code.line(iface.scopedName(this.pkg));
+      code.line(iface.scopedName(this.pkg, true));
     }
 
     for (const method of this.methods) {
@@ -109,7 +109,7 @@ class InterfaceProperty implements GoTypeMember {
 
   public get returnType(): string {
     return (
-      this.reference?.scopedName(this.parent.pkg) ??
+      this.reference?.scopedName(this.parent.pkg, true) ??
       this.property.type.toString()
     );
   }
