@@ -23,7 +23,7 @@ jobs:
     steps:
       # Set up all of our standard runtimes
       - name: Set up .NET 5
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v1.8.0
         with:
           dotnet-version: '5.0.x'
       - name: Set up Java 8
@@ -110,7 +110,7 @@ jobs:
     steps:
       # Set up all of our standard runtimes
       - name: Set up .NET 5
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v1.8.0
         with:
           dotnet-version: '5.0.x'
       - name: Set up Java 8
@@ -249,7 +249,7 @@ jobs:
     steps:
       # Set up all of our standard runtimes (this is matrix-based)
       - name: Set up .NET ${{ matrix.dotnet }}
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v1.8.0
         with:
           dotnet-version: ${{ matrix.dotnet }}
       - name: Set up Java ${{ matrix.java }}
@@ -343,7 +343,7 @@ jobs:
     steps:
       # Set up all of our standard runtimes
       - name: Set up .NET 3.1
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v1.8.0
         with:
           dotnet-version: '5.0.x'
       - name: Set up Java 8
